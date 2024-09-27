@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  be:
+    build:
+      context: ./backend  # Path to the backend directory
+      dockerfile: Dockerfile  # Specify the Dockerfile if needed
+    container_name: nest_backend  # Define custom container name for the backend
+    ports:
+      - "3001:3001"  # Expose backend on port 3001
+    networks:
+      - next-nest-network  # Updated network name
+
+  fe:
+    build:
+      context: ./frontend  # Path to the frontend directory
+      dockerfile: Dockerfile  # Specify the Dockerfile if needed
+    container_name: next_frontend  # Define custom container name for the frontend
+    ports:
+      - "3000:3000"  # Expose frontend on port 3000
+    environment:
+      BACKEND_API_URL: http://nest_backend:3001/api/data  # Use custom container name for the backend
+    networks:
+      - next-nest-network  # Updated network name
+
+networks:
+  next-nest-network:
+    driver: bridge  # Use the default bridge network for container communication
